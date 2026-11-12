@@ -1,0 +1,9 @@
+{% for span in ctx %}
+{%- set attrs = span.attributes %}
+span: {{ span.id }} (kind: {{ span.span_kind }})
+brief: {{ span.brief }}
+{% for a in attrs %}
+  attribute: {{ a.name }} ({{ a.type }}, {{ a.requirement_level }}) - {{ a.brief }}
+{% endfor %}
+
+{% endfor %}

@@ -1,0 +1,12 @@
+# Weaver generator configuration for the fixture registry; the target "fixture"
+# renders every span group and its attributes to plain text for byte-comparison
+# across binaries.
+
+templates:
+    - template: "fixture.j2"
+      filter: .groups | map(select(.type == "span")) | sort_by(.id)
+      application_mode: single
+      file_name: "fixture.txt"
+
+whitespace_control:
+    trim: true

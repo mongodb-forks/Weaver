@@ -1,0 +1,46 @@
+# Fixture semantic-convention registry for verifying weaver binaries built by
+# scripts/build_weaver_binaries.sh: every runnable cross target must produce
+# byte-identical output from this fixture, exercising attribute groups, extends,
+# multiple attribute types, and span kinds.
+
+groups:
+    - id: fixture.attribute_group
+      type: attribute_group
+      brief: "Fixture shared attributes."
+      stability: development
+      attributes:
+          - id: fixture.uuid
+            type: string
+            stability: development
+            requirement_level: required
+            brief: "A shared UUID."
+
+    - id: fixture.span_one
+      type: span
+      span_kind: internal
+      brief: "Fixture span one, inheriting the shared attribute."
+      stability: development
+      extends: fixture.attribute_group
+      attributes: []
+
+    - id: fixture.span_two
+      type: span
+      span_kind: server
+      brief: "Fixture span two with its own attributes."
+      stability: development
+      attributes:
+          - id: fixture.count
+            type: int
+            stability: development
+            requirement_level: required
+            brief: "A count."
+          - id: fixture.ratio
+            type: double
+            stability: development
+            requirement_level: required
+            brief: "A ratio."
+          - id: fixture.flag
+            type: boolean
+            stability: development
+            requirement_level: required
+            brief: "A flag."
