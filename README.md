@@ -14,22 +14,15 @@ span sources at build time.
 toolchain (weaver's `rust-toolchain.toml` version) and cross toolchains, builds every
 target, verifies that each runnable target produces byte-identical output from the
 fixture registry in `ci/fixture` (windows binaries are packaged but must be verified on
-a windows host — see the `verify_weaver_windows` task), and writes release tarballs to
-`release/` with a `SHA256SUMS` file.
+a windows host), and writes release tarballs to `release/` with a `SHA256SUMS` file.
 
-1. Run the script (Ubuntu 22.04, ~30 min), or the `build_weaver_binaries` Evergreen task.
-2. Verify the windows binary: publish a release with the tarballs, then run the
-   `verify_weaver_windows` task (or a Windows host) against it.
+1. Run the script (Ubuntu 22.04, ~30 min).
+2. Verify the windows binary: publish a release with the tarballs and run a build that
+   consumes it — the mongo repository's patch builds on a Windows variant execute
+   `weaver.exe` via the `typed_spans_gen` genrule.
 3. Publish a release on this repository tagged `v<weaver-version>-mdb.<n>` and attach
    the tarballs.
 4. Pin the new sha256 values in the mongo repository's `weaver_binary.bzl`.
 
 Upgrading the pinned weaver version means bumping `WEAVER_VERSION` (and the source
 tarball sha) in `scripts/build_weaver_binaries.sh` and repeating the four steps.
-
-## Evergreen
-
-`evergreen.yml` defines the `build_weaver_binaries` and `verify_weaver_windows` tasks
-and their patch-only variants. The project must be registered with Evergreen before
-these run there; until then the tasks run via the mongo repository's own patch builds
-or manually on a linux host.

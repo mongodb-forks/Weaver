@@ -8,8 +8,9 @@
 # The binaries are verified self-contained: every runnable target generates output from
 # the fixture registry under ci/fixture (checked in, so this repo has no dependency on
 # the mongo repo) and all outputs must be byte-identical to the official x86_64 build's
-# output. Windows binaries are packaged but not executed here; use the
-# verify_weaver_windows Evergreen task on a windows host after publishing a release.
+# output. Windows binaries are packaged but not executed here; smoke-run them on a
+# windows host after publishing (the mongo repository's patch builds on a Windows
+# variant do this via the typed_spans_gen genrule).
 #
 # Run from the root of a checkout of this repository. Requires: Ubuntu 22.04 (apt),
 # network access, ~10GB free disk, ~30 minutes.
@@ -118,8 +119,8 @@ verify_and_package() {
     local out_dir="$WORKDIR/${triple}-out"
     mkdir -p "$out_dir"
     if [[ "$triple" == *windows* ]]; then
-        # Windows binaries cannot be executed from this Linux task; run the
-        # verify_weaver_windows Evergreen task on a windows host after publishing.
+        # Windows binaries cannot be executed from this Linux host; smoke-run them on a
+        # windows host after publishing.
         echo "SKIP: no runtime verification for ${triple}"
     else
         local qemu="qemu-$(echo "$triple" | cut -d- -f1)-static"
